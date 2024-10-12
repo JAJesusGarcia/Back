@@ -1,0 +1,15 @@
+// docker create --name pg_container -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -v ~/pgdata:/var/lib/postgresql/data -p 5432:5432 postgres
+
+//    docker run --name pgadmin_container -p 80:80 -e 'PGADMIN_DEFAULT_EMAIL=admin@admin.com' -e 'PGADMIN_DEFAULT_PASSWORD=admin' --link pg_container:db -d dpage/pgadmin4
+
+//    -p 80:80 \
+
+//    -e 'PGADMIN_DEFAULT_EMAIL=admin@admin.com' \
+
+//    -e 'PGADMIN_DEFAULT_PASSWORD=admin' \
+
+//    --link pg_container:db \
+
+//    -d dpage/pgadmin4
+
+// docker exec -it pg_container psql -U postgres  // ejecutar shell de Postgres
