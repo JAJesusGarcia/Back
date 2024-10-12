@@ -2,17 +2,16 @@ import { DataSource } from 'typeorm';
 import { User } from '../entities/User';
 import { Appointment } from '../entities/Appointment';
 import { Credential } from '../entities/Credential';
+import { DATABASE_URL } from './envs';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
-  host: 'localhost',
-  port: 5432,
-  username: 'postgres',
-  password: 'postgres',
-  database: 'my_database', // Asegúrate de tener tu base de datos creada
-  dropSchema: false,
-  synchronize: true,
+  url: DATABASE_URL, // Usamos la URL completa
+  synchronize: true, // Sincroniza las entidades con la base de datos
   logging: false,
+  ssl: {
+    rejectUnauthorized: false, // Para evitar problemas de SSL en producción
+  },
   entities: [User, Appointment, Credential],
   subscribers: [],
   migrations: [],
