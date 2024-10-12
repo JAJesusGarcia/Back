@@ -13,8 +13,8 @@ dotenv.config();
 
 const corsOptions = {
   origin: [
-    'http://localhost:5173',
     'https://synergy2-devs.vercel.app/home', // Asegúrate de que coincida exactamente con el origen del frontend
+    'http://localhost:5173',
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type'],
