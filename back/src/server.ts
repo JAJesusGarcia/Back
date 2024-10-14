@@ -29,8 +29,9 @@ server.use(
     resave: false,
     saveUninitialized: true,
     cookie: {
-      secure: process.env.NODE_ENV === 'production', // Asegúrate de que sea true en producción
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // none para que funcione con credenciales cruzadas
+      secure: process.env.NODE_ENV === 'production', // Asegúrate de que esté en true para HTTPS
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // none para sitios cruzados
+      httpOnly: true,
     },
   }),
 );
