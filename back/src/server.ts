@@ -12,13 +12,10 @@ const server = express();
 dotenv.config();
 
 const corsOptions = {
-  origin: [
-    'https://synergy2-devs.vercel.app/', // Asegúrate de que coincida exactamente con el origen del frontend
-    'http://localhost:5173',
-  ],
+  origin: ['https://synergy2-devs.vercel.app', 'http://localhost:5173'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type'],
-  credentials: true, // Si estás enviando cookies o encabezados de autorización
+  allowedHeaders: ['Content-Type', 'Authorization', 'token'], // Añade el encabezado 'Authorization' o 'token'
+  credentials: true,
 };
 
 server.use(cors(corsOptions));
@@ -31,7 +28,10 @@ server.use(
     secret: 'your_secret_key',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false }, // Cambia a true en producción si usas HTTPS
+    cookie: {
+      secure: process.env.NODE_ENV === 'production', // Asegúrate de que sea true en producción
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // none para que funcione con credenciales cruzadas
+    },
   }),
 );
 
