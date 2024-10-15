@@ -8,13 +8,17 @@ import appointmentRouter from './routes/appointmentRouter';
 import emailRouter from './routes/emailRouter';
 import dotenv from 'dotenv';
 
-const server = express();
 dotenv.config();
 
+const server = express();
+
 const corsOptions = {
-  origin: ['https://synergy2-devs.vercel.app', 'http://localhost:5173'],
+  origin: [
+    process.env.FRONTEND_URL || 'https://synergy2-devs.vercel.app',
+    'http://localhost:5173',
+  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'token'], // Añade el encabezado 'Authorization' o 'token'
+  allowedHeaders: ['Content-Type', 'Authorization', 'token'],
   credentials: true,
 };
 
@@ -22,16 +26,18 @@ server.use(cors(corsOptions));
 server.use(morgan('dev'));
 server.use(express.json());
 
-// Configuración de la sesión
+const sessionSecret = process.env.SESSION_SECRET || 'your_secret_key';
+
 server.use(
   session({
-    secret: 'your_secret_key',
+    secret: sessionSecret,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: {
-      secure: process.env.NODE_ENV === 'production', // Cambiar a true si usas HTTPS en producción
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // none para cross-site
-      httpOnly: true, // Las cookies solo son accesibles en el servidor
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000, // 24 horas
     },
   }),
 );
@@ -39,5 +45,10 @@ server.use(
 server.use('/users', userRouter);
 server.use('/appointments', appointmentRouter);
 server.use('/emails', emailRouter);
+
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
 
 export default server;
